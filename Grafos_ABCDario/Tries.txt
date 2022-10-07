@@ -1,0 +1,10 @@
+Escribe un programa en C++ que implemente una estructura de datos TRIE.
+Escribe también un  programa que permita verificar su funcionalidad.
+La entrada al programa es un número N , seguido de N palabras, que serán insertadas a la estructura TRIE.
+Después se lee un dato M seguido de M palabras a buscar en la estructura TRIE.
+
+La salida del programa es el recorrido DFS del TRIE, seguido de M booleanos correspondientes al resultado de buscar cada una de las M palabras en la estructura.
+
+Propósito
+
+Poner en práctica la implementación de las estructuras "tries".
