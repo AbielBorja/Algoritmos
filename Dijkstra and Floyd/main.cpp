@@ -4,6 +4,7 @@
 
 using namespace std;
 
+//Complejodad O(n^2) por trabajar con una matriz de vectores
 vector<vector<int>> createMatrix(int numNodes)
 {
     vector<vector<int>> matrix;
@@ -33,6 +34,8 @@ vector<Node *> createNodes(int numNodes)
     return nodes;
 }
 
+//Creacion de nuevos con los nodos agregado
+// COmplejidad O(n^2) por cuestion de trabajar con una matrix de input
 vector<Edge *> createEdges(vector<vector<int>> matrix, vector<Node *> nodes)
 {
     vector<Edge *> edges;
