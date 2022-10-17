@@ -25,6 +25,7 @@ public:
     Node* getMinDist(vector<Node *> qs);
     void processPath(vector<Edge*> path);
     int runFordFulkerson(Node* s, Node* t);
+    bool bfs(Node*s, Node* t);
 
 
 };

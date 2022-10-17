@@ -1,3 +1,5 @@
+// Daniel Alejandro Martinez Rosete A01654093
+// Abiel Moisès Borja Garcìa A01654937
 #include "Node.h"
 #include "Edge.h"
 #include "Graph.h"
@@ -22,6 +24,8 @@ vector<vector<int>> createMatrix(int numNodes)
     return matrix;
 }
 
+// Complejidad O(n)
+// Donde n es el numero de nodos que queremos crear
 vector<Node *> createNodes(int numNodes)
 {
     vector<Node *> nodes;
@@ -71,44 +75,32 @@ vector<Edge *> createEdges(vector<vector<int>> matrix, vector<Node *> nodes)
 
 int main()
 {
-    // int numNodes;
-    // cout << "Numero de nodos ";
-    // cin >> numNodes;
-    // cout << "Ingresa matriz de nodos: " << endl;
-    // vector<vector<int>> matrix = createMatrix(numNodes);
+    int numNodes;
+    cout << "Numero de nodos ";
+    cin >> numNodes;
+    cout << "Ingresa matriz de nodos: " << endl;
+    vector<vector<int> > matrix = createMatrix(numNodes);
 
-    // for (int i = 0; i < numNodes; i++)
-    // {
-    //     vector<Node *> nodes = createNodes(numNodes);
-    //     vector<Edge *> edges = createEdges(matrix, nodes);
-    //     Graph *graph = new Graph(nodes, edges);
-    // }
+    /*
+    6
+    0 11 12 -1 -1 -1
+    -1 0 -1 12 -1 -1
+    -1 1 0 -1 11 -1 
+    -1 -1 -1 0 -1 19
+    -1 -1 -1 7 0 4
+    -1 -1 -1 -1 -1 0
+    */
 
-    vector<Node *> nodes;
-    vector<Edge *> edges;
+    vector<Node *> nodes = createNodes(numNodes);
+    vector<Edge *> edges = createEdges(matrix, nodes);
+    Graph *graph = new Graph(nodes, edges);
 
-    Node *n1 = new Node(1);
-    Node *n2 = new Node(2);
-    Node *n3 = new Node(3);
-    Node *n4 = new Node(4);
-    Node *n5 = new Node(5);
-    Node *n6 = new Node(6);
-    nodes.push_back(n1);
-    nodes.push_back(n2);
-    nodes.push_back(n3);
-    nodes.push_back(n4);
-    nodes.push_back(n5);
-    nodes.push_back(n6);
-    //              Nodo -> Nodo -> Distancia -> Capacidad -> Flujo
-    edges.push_back(new Edge(n1, n2, 6, 8));
-    edges.push_back(new Edge(n1, n3, 2, 3));
-    edges.push_back(new Edge(n2, n4, 12, 9));
-    edges.push_back(new Edge(n3, n4, 7, 7));
-    edges.push_back(new Edge(n3, n5, 13, 4));
-    edges.push_back(new Edge(n4, n6, 1, 2));
-    edges.push_back(new Edge(n5, n6, 10, 5));
+    int maxFlow = graph->runFordFulkerson(nodes.at(0),nodes.at(5));
+    cout << endl;
+    cout << endl;
+    cout << to_string(maxFlow) << endl;
 
-    Graph* g = new Graph(nodes, edges);
+    return 0;
 
     return 0;
 }

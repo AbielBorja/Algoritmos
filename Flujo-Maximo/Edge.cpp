@@ -1,9 +1,9 @@
 #include "Edge.h"
 
-Edge::Edge(Node* _first, Node* _second, int _weigth, int _capacity)
+Edge::Edge(Node* _first, Node* _second, int _capacity, int _residual_flow)
 {
     first = _first;
     second = _second;
-    weight = _weigth;
+    residual_flow = _residual_flow;
     capacity = _capacity;
 }

@@ -54,6 +54,8 @@ void Graph::remove(vector<Node *> &qs, Node *q)
     }
 }
 
+// Complejidad O(n)
+// Donde n es el tamaño del vector de edges
 Edge *Graph::findEdge(Node *u, Node *v)
 {
     Edge *result = NULL;
@@ -71,71 +73,85 @@ Edge *Graph::findEdge(Node *u, Node *v)
     return result;
 }
 
-void Graph::processPath(vector<Edge *> path)
-{
-    vector<Edge *>::iterator it;
-    for (it = path.begin(); it != path.end(); it++)
-    {
-        if ((*it)->capacity > 0)
-        {
-            return;
-        }
-    }
-
-    Edge *minEdge = getMinCap(path);
-
-    vector<Edge *>::iterator is;
-    for (is = path.begin(); is != path.end(); is++)
-    {
-        (*is)->capacity += minEdge->capacity;
-        Edge *temp = NULL;
-        temp = findEdge((*is)->second, (*is)->first);
-        if (temp != NULL)
-        {
-            (*is)->capacity -= minEdge->capacity;
-        }
-    }
-}
-
+// Complejidad O(x^2*log(n+n*n-1+m*t)+3z)
+// Donde x es el tamaño de la cantidad de edges que se envian
+// Donde n es el tamaño de vectores de nodos
+// Donde m es el tamaño de vectores de vecinos
+// Donde t es el tamaño de vectores de edges
+// DOnde z es el tamaño del vector de los los nodos del path
 int Graph::runFordFulkerson(Node *source, Node *sink)
 {
     // Iniciamos el source con distancia 0
     int max_flow = 0;
     vector<Node *> Q;
     vector<Node *>::iterator ni;
-
-    for (ni = nodes.begin(); ni != nodes.end(); ni++)
+    vector<Edge *>::iterator ei;
+    for (ei = edges.begin(); ei != edges.end(); ++ei)
     {
-        (*ni)->distance = -1;
-        (*ni)->prev = NULL;
-        Q.push_back(*ni);
-    }
-
-    // Mientras Q no este vacio seguimos con el calulo de peso
-    while (!Q.empty())
-    {
-        Node *u = Q.front();
-        vector<Node *> neighbors = getNeighbors(u);
-        remove(Q, u);
-
-        vector<Node *>::iterator it;
-        for (auto ni : neighbors)
+        (*ei)->residual_flow = (*ei)->capacity;
+        while (bfs(source, sink))
         {
-            ni->prev = u;
-            if (ni == sink)
+            int path_flow = 10000;
+            Node *curr = sink;
+            while (curr != source)
             {
-                vector<Edge*> path;
-                Node* current = sink;
-                while(current != source)
-                {
-                    Edge* e = findEdge(current->prev, current);
-                    path.push_back(e);
-                    current = current->prev;
-                    if(current == nullptr) break;
-                }
-                processPath(path);
+                Edge *e1 = findEdge(curr->prev, curr);
+                path_flow = min(path_flow, e1->residual_flow);
+
+                curr = curr->prev;
             }
-            
+            curr = sink;
+            while (curr != source)
+            {
+                Edge *e1 = findEdge(curr->prev, curr);
+                e1->residual_flow -= path_flow;
+
+                Edge *e2 = findEdge(curr, curr->prev);
+                if (e2 != nullptr) e2->residual_flow += path_flow;
+                curr = curr->prev;
+            }
+            max_flow += path_flow;
         }
     }
+    return max_flow;
+}
+
+// Complejidad de O(n+n*n-1+m*t)
+// Donde n es el tamaño de vectores de nodos
+// Donde m es el tamaño de vectores de vecinos
+// Donde t es el tamaño de vectores de edges
+bool Graph::bfs(Node *s, Node *t)
+{
+    vector<Node *>::iterator ni;
+    for (ni = nodes.begin(); ni != nodes.end(); ++ni)
+    {
+        (*ni)->visited = false;
+    }
+
+    vector<Node *> q;
+    q.push_back(s);
+    s->prev = nullptr;
+    s->visited = true;
+
+    while (q.size() > 0)
+    {
+        Node *u = q[0];
+        remove(q, u);
+        vector<Node *>::iterator v;
+        vector<Node *> neighbors = getNeighbors(u);
+        for (v = neighbors.begin(); v != neighbors.end(); ++v)
+        {
+            Edge *e = findEdge(u, *v);
+            if (e != nullptr)
+            {
+                if ((*v)->visited == false && e->residual_flow > 0)
+                {
+                    q.push_back(*v);
+                    (*v)->prev = u;
+                    (*v)->visited = true;
+                }
+            }
+        }
+    }
+    return t->visited == true;
 }
