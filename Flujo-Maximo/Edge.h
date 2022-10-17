@@ -11,11 +11,11 @@ class Edge
 private:
     
 public:
-    Edge(Node* _first, Node* _second, int _weigth);
+    Edge(Node* _first, Node* _second, int _weigth, int _capacity);
     Node* first;
     Node* second;
     int weight;
-
+    int capacity;
 
 };
 

@@ -19,14 +19,13 @@ public:
     vector<Edge*> edges;
 
     vector<Node*> getNeighbors(Node* n);
-    void print();
-    void printFloyd(vector<vector<int>> matrix);
-    void runDijkstra(Node* source);
-    void runFloyd();
-    void runKruskals();
-    Node* getMinDist(vector<Node*> qs);
-    void remove(vector<Node*> &qs, Node* q);
-    int getLegth(Node* u, Node* v);
+    Edge* getMinCap(vector<Edge*> qs);
+    void remove(vector<Node *> &qs, Node *q);
+    Edge* findEdge(Node* u, Node* v);
+    Node* getMinDist(vector<Node *> qs);
+    void processPath(vector<Edge*> path);
+    int runFordFulkerson(Node* s, Node* t);
+
 
 };
 
