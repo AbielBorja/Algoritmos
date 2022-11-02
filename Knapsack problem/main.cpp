@@ -1,7 +1,7 @@
 //  Actividad 3.2
 //  Implementación de "Dijkstra and Floyd"
-//
 //  Alfonso Pineda Cedillo   |   A01660394
+//  Abiel Moisés Borja García    |   A01654937
 
 #include "Graph.h"
 #include <iostream>
@@ -54,7 +54,7 @@ vector<Edge *> buildEdges(vector<int> weights, vector<Node *> nodes)
     {
         for (int j = i + 1; j < nodes.size(); j++)
         {
-            edges.push_back(new Edge(nodes[i], nodes[j], weights[i]));
+            edges.push_back(new Edge(nodes[i], nodes[j], weights[i]*-1));
         }
     }
     return edges;
@@ -81,14 +81,17 @@ int main()
     // Creación del grafo con los vectores de nodos y conexiones (edges)
     // previamente creados.
     Graph *graph = new Graph(nodes, edges);
+    vector<Node*> diamons;
     for (int i = 0; i < n; i++)
     {
         graph->runDijkstra(nodes[i]);
-        cout << "----" << endl;
-        graph->print();
-        cout << "----";
+        graph->pushNodes(diamons);
+        // cout << "----" << endl;
+        // graph->print();
+        // cout << "----";
         graph->resetNodes();
     }
+    graph->daBest(diamons, w);
 
     return 0;
 }

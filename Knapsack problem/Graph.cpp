@@ -11,6 +11,8 @@ Graph::Graph(vector<Node *> _nodes, vector<Edge *> _edges)
     edges = _edges;
 }
 
+// Complejidad  O(n)
+// Donde n es el tamaño del vector de nodos
 void Graph::print()
 {
     for (auto node : nodes)
@@ -18,6 +20,10 @@ void Graph::print()
 
         if (node->prev != nullptr)
         {
+            if (src->number == node->number)
+            {
+                continue;
+            }
             cout << "Node: " << src->number;
             cout << " to node " << node->number;
             cout << " : " << node->distance << endl;
@@ -25,14 +31,55 @@ void Graph::print()
     }
 }
 
+// Complejidad O(n)
+// Donde n es el tamño del vector de los nodos
 void Graph::resetNodes()
 {
-    for (auto node: nodes)
+    for (auto node : nodes)
     {
         node->distance = 10000;
     }
 }
 
+void Graph::daBest(vector<Node *> diamons, int capacity)
+{
+    for (auto node : diamons)
+    {
+        // cout << "DEBUG 2";
+        // node = node->prev;
+        // node->number = node->prev->number;
+        // cout << "DEBUG 3";
+        // while (node != nullptr)
+        // {
+        //     node = node->prev;
+        //     node->number += node->prev->number;
+        // }
+        // cout << "Valor obtenido: " << node->number << endl;
+    }
+}
+
+void Graph::pushNodes(vector<Node *> diamons)
+{
+    for (auto node : nodes)
+    {
+        if (node->prev != nullptr)
+        {
+            if (src->number == node->number)
+            {
+                continue;
+            }
+            diamons.push_back(node);
+        }
+    }
+    for (auto node : diamons)
+    {
+        cout << endl;
+        cout << "DIAMONS" << endl;
+        cout << " Node: " << node->number;
+        cout << " Distance " << node->distance;
+    }
+
+}
 /*
 getLength | O(n)
 Recibe dos nodos y nos devuelve la distancia entre ellos.
@@ -117,7 +164,7 @@ Node *Graph::getMinDist(vector<Node *> qs)
 void Graph::runDijkstra(Node *source)
 {
     src = source;
-    cout << "Soy el source: " << src->number;
+    cout << "\n----Soy el source: " << src->number;
     // Iniciamos el source con distancia 0
     source->distance = 0;
     vector<Node *> Q = nodes;
@@ -161,7 +208,6 @@ void Graph::runDijkstra(Node *source)
             }
         }
     }
-    
 }
 
 /*

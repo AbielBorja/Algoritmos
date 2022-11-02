@@ -24,4 +24,6 @@ public:
     void remove(vector<Node *> &qs, Node *q);
     int getLength(Node *u, Node *v);
     void resetNodes();
+    void pushNodes(vector<Node *> diamons);
+    void daBest(vector<Node *> diamons, int capacity);
 };
