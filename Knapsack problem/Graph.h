@@ -12,6 +12,7 @@ class Graph
 public:
     vector<Node *> nodes;
     vector<Edge *> edges;
+    
 
     Graph(vector<Node *> _nodes, vector<Edge *> _edges);
 
@@ -24,6 +25,6 @@ public:
     void remove(vector<Node *> &qs, Node *q);
     int getLength(Node *u, Node *v);
     void resetNodes();
-    void pushNodes(vector<Node *> diamons);
-    void daBest(vector<Node *> diamons, int capacity);
+    void pushNodes(vector<Node *> &diamons);
+    void daBest(vector<Node *> &diamons, int capacity);
 };

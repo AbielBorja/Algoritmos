@@ -54,7 +54,7 @@ vector<Edge *> buildEdges(vector<int> weights, vector<Node *> nodes)
     {
         for (int j = i + 1; j < nodes.size(); j++)
         {
-            edges.push_back(new Edge(nodes[i], nodes[j], weights[i]*-1));
+            edges.push_back(new Edge(nodes[i], nodes[j], weights[i] * -1));
         }
     }
     return edges;
@@ -81,16 +81,21 @@ int main()
     // Creación del grafo con los vectores de nodos y conexiones (edges)
     // previamente creados.
     Graph *graph = new Graph(nodes, edges);
-    vector<Node*> diamons;
+    vector<Node *> diamons;
     for (int i = 0; i < n; i++)
     {
         graph->runDijkstra(nodes[i]);
+        cout << "----" << endl;
+        graph->print();
+        cout << "----";
         graph->pushNodes(diamons);
-        // cout << "----" << endl;
-        // graph->print();
-        // cout << "----";
         graph->resetNodes();
     }
+    for (auto node : diamons)
+    {
+        cout << "Distancia de los nodos de diamons en main" << node->distance << endl;
+    }
+    
     graph->daBest(diamons, w);
 
     return 0;

@@ -38,47 +38,38 @@ void Graph::resetNodes()
     for (auto node : nodes)
     {
         node->distance = 10000;
+        node->prev = nullptr;
     }
 }
 
-void Graph::daBest(vector<Node *> diamons, int capacity)
+void Graph::daBest(vector<Node *> &diamons, int capacity)
 {
     for (auto node : diamons)
     {
-        // cout << "DEBUG 2";
-        // node = node->prev;
-        // node->number = node->prev->number;
-        // cout << "DEBUG 3";
-        // while (node != nullptr)
-        // {
-        //     node = node->prev;
-        //     node->number += node->prev->number;
-        // }
-        // cout << "Valor obtenido: " << node->number << endl;
+        cout << "Valor obtenido: " << node->number << " Peso: " << node->distance << endl;
     }
 }
 
-void Graph::pushNodes(vector<Node *> diamons)
+void Graph::pushNodes(vector<Node *> &diamons)
 {
-    for (auto node : nodes)
+    Node *curr = nodes[nodes.size() - 1];
+    // DEBUG
+    // cout << "Inicio como curr: " << curr->number;
+    // cout << "\n Distancia del ultimo nodo: " << nodes[nodes.size() -1]->distance << endl;
+    int sum = 0;
+    while (curr->prev != nullptr)
     {
-        if (node->prev != nullptr)
-        {
-            if (src->number == node->number)
-            {
-                continue;
-            }
-            diamons.push_back(node);
-        }
+        
+        curr = curr->prev;
+        sum += curr->number;
+        // DEBUG
+        // cout << "\nNumero de curr: " << curr->number << " Numero de sum: " << sum << " Distancia actual: " << curr->distance << endl;
     }
-    for (auto node : diamons)
-    {
-        cout << endl;
-        cout << "DIAMONS" << endl;
-        cout << " Node: " << node->number;
-        cout << " Distance " << node->distance;
-    }
-
+    curr->distance = nodes[nodes.size() -1]->distance;
+    // DEBUG
+    // cout << "Supuestamente cambio la distancia del nodo curr: " << curr->distance << endl;
+    curr->number = sum;
+    diamons.push_back(curr);
 }
 /*
 getLength | O(n)
