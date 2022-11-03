@@ -12,7 +12,6 @@ class Graph
 public:
     vector<Node *> nodes;
     vector<Edge *> edges;
-    
 
     Graph(vector<Node *> _nodes, vector<Edge *> _edges);
 

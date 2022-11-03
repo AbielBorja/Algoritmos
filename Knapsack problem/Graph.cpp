@@ -25,7 +25,7 @@ void Graph::print()
                 continue;
             }
             cout << "Node: " << src->number;
-            cout << " to node " << node->number;
+            cout << " to node " << nodes[nodes.size() - 1]->number;
             cout << " : " << node->distance << endl;
         }
     }
@@ -35,41 +35,71 @@ void Graph::print()
 // Donde n es el tamño del vector de los nodos
 void Graph::resetNodes()
 {
+    cout << "RESET" << endl;
+    cout << "Nodes 2" << endl;
     for (auto node : nodes)
     {
         node->distance = 10000;
         node->prev = nullptr;
     }
+    for (auto node : nodes)
+    {
+        cout << "Num: " << node->number << " Distancia: " << node->distance << endl;
+    }
 }
 
 void Graph::daBest(vector<Node *> &diamons, int capacity)
 {
+    cout << endl;
+    int valueMax = 0;
+    int valueCapacity = 0;
     for (auto node : diamons)
     {
-        cout << "Valor obtenido: " << node->number << " Peso: " << node->distance << endl;
+        if (node->distance > capacity)
+        {
+            continue;
+        }
+        if (node->number > valueMax)
+        {
+            valueMax = node->number;
+            valueCapacity = node->distance * -1;
+        }
     }
+    cout << "Mejor valor: " << valueMax << " Con un peso de: " << valueCapacity;
 }
 
 void Graph::pushNodes(vector<Node *> &diamons)
 {
-    Node *curr = nodes[nodes.size() - 1];
+    vector<Node *> temp = nodes;
+    Node *curr = temp[temp.size() - 1];
     // DEBUG
     // cout << "Inicio como curr: " << curr->number;
-    // cout << "\n Distancia del ultimo nodo: " << nodes[nodes.size() -1]->distance << endl;
+    // cout << "\nDistancia del ultimo nodo: " << temp[temp.size() -1]->distance << endl;
     int sum = 0;
+
     while (curr->prev != nullptr)
     {
-        
         curr = curr->prev;
         sum += curr->number;
         // DEBUG
         // cout << "\nNumero de curr: " << curr->number << " Numero de sum: " << sum << " Distancia actual: " << curr->distance << endl;
     }
-    curr->distance = nodes[nodes.size() -1]->distance;
-    // DEBUG
-    // cout << "Supuestamente cambio la distancia del nodo curr: " << curr->distance << endl;
+    curr->distance = temp[temp.size() - 1]->distance;
     curr->number = sum;
     diamons.push_back(curr);
+
+    // DEBUG
+    cout << endl;
+    cout << "Nodes 1" << endl;
+    for (auto node : nodes)
+    {
+        cout << "Num: " << node->number << " Distancia: " << node->distance << endl;
+    }
+    cout << "Diamons 1" << endl;
+    for (auto node : diamons)
+    {
+        cout << "Valor acumulado: " << node->number << " Con un peso de: " << node->distance << endl;
+    }
 }
 /*
 getLength | O(n)

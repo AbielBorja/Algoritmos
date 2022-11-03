@@ -82,6 +82,8 @@ int main()
     // previamente creados.
     Graph *graph = new Graph(nodes, edges);
     vector<Node *> diamons;
+
+    // vector<Node *> diamons;
     for (int i = 0; i < n; i++)
     {
         graph->runDijkstra(nodes[i]);
@@ -91,11 +93,7 @@ int main()
         graph->pushNodes(diamons);
         graph->resetNodes();
     }
-    for (auto node : diamons)
-    {
-        cout << "Distancia de los nodos de diamons en main" << node->distance << endl;
-    }
-    
+
     graph->daBest(diamons, w);
 
     return 0;
