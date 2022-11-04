@@ -1,7 +1,16 @@
-//  Actividad 3.2
-//  Implementación de "Dijkstra and Floyd"
+//  Actividad 3.3
+//  Implementación de "Knapsack problem"
 //  Alfonso Pineda Cedillo   |   A01660394
 //  Abiel Moisés Borja García    |   A01654937
+
+/* ------------------- EXPLICACIÓN   ------------------
+
+Para darle solución a este problema de Knapsack problem, hicimos uso del algoritmo de Dijkstra, por lo que unicamente analiza
+el path con mayor valor por cada uno de los nodos, y los compara entre sí. Debido a lo anterior, no recorremos el grafo completo, por lo que en algunos casos, nuestro algoritmo no devuelve la opción más óptima. Para el tiempo con el que contamos, damos solución al problema, sin embargo, podría mejorarse.
+
+Para solucionar dicha situación, la implementación de un algorimto que considere flujos (como Floyd) podría darnos mejores resultados debido a que considera más paths por cada nodo, sin embargo, no recorre el grafo en su totalidad. Para poder encontrar la solución mejor, necesitaríamos recorrer todo el grafo mediante bfs, haciendo una comparación de los paths encontrados y seleccionando el que nos devuelva un mayor valor a un menor costo (peso)
+
+*/
 
 #include "Graph.h"
 #include <iostream>
@@ -73,7 +82,7 @@ int main()
     cout << "\nIntroduce el peso de cada uno de los elementos:" << endl;
     vector<int> weihgts = readMatrix(n);
 
-    cout << "Ingresa la capacidad máxima de la mochila: ";
+    cout << "\nIngresa la capacidad máxima de la mochila: ";
     cin >> w;
     // Creación de los vectores de nodos y edges.
     vector<Node *> nodes = buildNodes(n + 1);
@@ -90,11 +99,11 @@ int main()
         cout << "----" << endl;
         graph->print();
         cout << "----";
-        graph->pushNodes(diamons);
+        graph->pushNodes(w);
         graph->resetNodes();
     }
 
-    graph->daBest(diamons, w);
+    graph->daBest();
 
     return 0;
 }

@@ -31,74 +31,61 @@ void Graph::print()
     }
 }
 
-// Complejidad O(n)
+// resetNodes | O(n)
 // Donde n es el tamño del vector de los nodos
 void Graph::resetNodes()
 {
-    cout << "RESET" << endl;
-    cout << "Nodes 2" << endl;
+    // DEBUG
+    // cout << "RESET" << endl;
+    // cout << "Nodes 2" << endl;
+
     for (auto node : nodes)
     {
         node->distance = 10000;
         node->prev = nullptr;
     }
-    for (auto node : nodes)
-    {
-        cout << "Num: " << node->number << " Distancia: " << node->distance << endl;
-    }
-}
 
-void Graph::daBest(vector<Node *> &diamons, int capacity)
-{
-    cout << endl;
-    int valueMax = 0;
-    int valueCapacity = 0;
-    for (auto node : diamons)
-    {
-        if (node->distance > capacity)
-        {
-            continue;
-        }
-        if (node->number > valueMax)
-        {
-            valueMax = node->number;
-            valueCapacity = node->distance * -1;
-        }
-    }
-    cout << "Mejor valor: " << valueMax << " Con un peso de: " << valueCapacity;
-}
-
-void Graph::pushNodes(vector<Node *> &diamons)
-{
-    vector<Node *> temp = nodes;
-    Node *curr = temp[temp.size() - 1];
     // DEBUG
-    // cout << "Inicio como curr: " << curr->number;
-    // cout << "\nDistancia del ultimo nodo: " << temp[temp.size() -1]->distance << endl;
+    // for (auto node : nodes)
+    // {
+    //     cout << "Num: " << node->number << " Distancia: " << node->distance << endl;
+    // }
+}
+
+/*
+daBest
+Imprime el resultado del algoritmo, devolviendo el mejor valor obtenido, permitido por la capacidad máxima de la mochila.
+*/
+void Graph::daBest()
+{
+    cout << "\nMejor valor: " << valueMax << " Con un peso de: " << valueCapacity * -1;
+}
+
+/*
+pushNodes | O(n)
+Su complejidad es O(n) ya que recorre el vector de nodos, obteniendo la suma total de los nodos (valor acumulado)
+*/
+void Graph::pushNodes(int capacity)
+{
+    Node *curr = nodes[nodes.size() - 1];
     int sum = 0;
 
     while (curr->prev != nullptr)
     {
         curr = curr->prev;
         sum += curr->number;
-        // DEBUG
-        // cout << "\nNumero de curr: " << curr->number << " Numero de sum: " << sum << " Distancia actual: " << curr->distance << endl;
     }
-    curr->distance = temp[temp.size() - 1]->distance;
-    curr->number = sum;
-    diamons.push_back(curr);
 
-    // DEBUG
-    cout << endl;
-    cout << "Nodes 1" << endl;
-    for (auto node : nodes)
+    curr->distance = nodes[nodes.size() - 1]->distance;
+    curr->number = sum;
+
+    if (curr->distance * -1 <= capacity)
     {
-        cout << "Num: " << node->number << " Distancia: " << node->distance << endl;
-    }
-    cout << "Diamons 1" << endl;
-    for (auto node : diamons)
-    {
-        cout << "Valor acumulado: " << node->number << " Con un peso de: " << node->distance << endl;
+        if (curr->number > valueMax)
+        {
+            valueMax = curr->number;
+            valueCapacity = curr->distance;
+        }
     }
 }
 /*
@@ -178,7 +165,7 @@ Node *Graph::getMinDist(vector<Node *> qs)
     return minDist;
 }
 
-// Complejidad O(n + m log(n))
+// runDijkstra | O(n + m log(n))
 // Donde n son los nodos del grafo
 // DOnde m son las coneciones que tiene el graph
 // Logaritmo por la cantidad de recurisividad que se tiene que hacer dentro de la función
