@@ -1,13 +1,11 @@
 // Daniel Alejandro Martinez Rosete A01654093
-
+#include <algorithm>
 #include <iostream>
 #include <random>
 #include <vector>
 #include "Coord.h"
 
 using namespace std;
-
-
 
 int main()
 {
@@ -21,9 +19,10 @@ int main()
     }
 
     std::sort(coordList.begin(), coordList.end(),
-            [](const Coord &x, const Coord &y) {
-                return x.x < y.x;
-            });
+              [](const Coord &x, const Coord &y)
+              {
+                  return x.x < y.x;
+              });
 
     cout << endl;
     cout << endl;
@@ -37,20 +36,20 @@ int main()
     cout << endl;
 
     size_t const half_size = coordList.size() / 2;
-    vector half1(coordList.begin(), coordList.begin() + half_size);
-    vector half2(coordList.begin() + half_size, coordList.end());
+    vector<Coord> half1(coordList.begin(), coordList.begin() + half_size);
+    vector<Coord> half2(coordList.begin() + half_size, coordList.end());
 
     vector<float> fhd;
     vector<float> shd;
 
     vector<Coord>::iterator iter1;
 
-    for(iter1 = half1.begin(); iter1 != half1.end(); iter1++)
+    for (iter1 = half1.begin(); iter1 != half1.end(); iter1++)
     {
         vector<Coord>::iterator iter2;
-        for(iter2 = half1.begin(); iter2 != half1.end(); iter2++)
+        for (iter2 = half1.begin(); iter2 != half1.end(); iter2++)
         {
-            if((*iter1) != (*iter2))
+            if ((*iter1).x != (*iter2).x || (*iter1).y != (*iter2).y)
             {
                 float dist = (*iter1).getDist((*iter2));
                 fhd.push_back(dist);
@@ -60,12 +59,12 @@ int main()
 
     vector<Coord>::iterator iter3;
 
-    for(iter3 = half2.begin(); iter3 != half2.end(); iter3++)
+    for (iter3 = half2.begin(); iter3 != half2.end(); iter3++)
     {
         vector<Coord>::iterator iter4;
-        for(iter4 = half2.begin(); iter4 != half2.end(); iter4++)
+        for (iter4 = half2.begin(); iter4 != half2.end(); iter4++)
         {
-            if((*iter3) != (*iter4))
+            if ((*iter3).x != (*iter4).x || (*iter3).y != (*iter4).y)
             {
                 float dist = (*iter3).getDist((*iter4));
                 shd.push_back(dist);
@@ -73,8 +72,12 @@ int main()
         }
     }
 
-    vector<float>::iterator
+    vector<float>::iterator;
+    for (  i = 0; i < count; i++)
+    {
+        /* code */
+    }
+    
 
     return 0;
-
 }
