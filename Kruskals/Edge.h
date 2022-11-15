@@ -6,18 +6,14 @@ using namespace std;
 #ifndef __EDGE
 #define __EDGE
 
-class Edge
+class Edge 
 {
-private:
-    
 public:
-    Edge(Node* _first, Node* _second, int _weigth);
     Node* first;
     Node* second;
     int weight;
-
+    Edge(Node* first, Node* second, int weight);
+    string toString();
 
 };
-
-
 #endif

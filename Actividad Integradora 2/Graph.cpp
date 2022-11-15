@@ -4,6 +4,12 @@ Graph::Graph(vector<Node *> _nodes, vector<Edge *> _edges)
 {
     nodes = _nodes;
     edges = _edges;
+    this->ds = new DisjointSets();
+
+}
+
+bool comparator(const Edge* s1, const Edge* s2) {
+    return s1->weight < s2->weight;
 }
 
 //Complejidad O(n)
@@ -19,6 +25,23 @@ vector<Node *> Graph::getNeighbors(Node *n)
         if ((*ei)->first == n) neighbors.push_back((*ei)->second);
     }
     return neighbors;
+}
+
+
+void Graph::resetNodes()
+{
+
+    for (auto node : nodes)
+    {
+        node->distance = 10000;
+        node->prev = nullptr;
+    }
+
+    // DEBUG
+    // for (auto node : nodes)
+    // {
+    //     cout << "Num: " << node->number << " Distancia: " << node->distance << endl;
+    // }
 }
 
 // Complejidad O(n)
@@ -158,7 +181,6 @@ void Graph::print()
 // Donde n es el tamaño de los vectores de los nodos;
 // Complejidad alternativa O(n^3) + 2O(n)
 // Donde n es el tamaño de los vectores de los nodos se agrega '2O(n) por el agregar de generar la matriz y los edges
-
 void Graph::runFloyd()
 {
     vector<vector<int>> matrix;
@@ -209,4 +231,119 @@ void Graph::printFloyd(vector<vector<int>> matrix)
         }
         cout << "\n";
     }
+}
+
+
+// Complejidad O(x^2*log(n+n*n-1+m*t)+3z)
+// Donde x es el tamaño de la cantidad de edges que se envian
+// Donde n es el tamaño de vectores de nodos
+// Donde m es el tamaño de vectores de vecinos
+// Donde t es el tamaño de vectores de edges
+// DOnde z es el tamaño del vector de los los nodos del path
+int Graph::runFordFulkerson(Node *source, Node *sink)
+{
+    // Iniciamos el source con distancia 0
+    int max_flow = 0;
+    vector<Node *> Q;
+    vector<Node *>::iterator ni;
+    vector<Edge *>::iterator ei;
+    for (ei = edges.begin(); ei != edges.end(); ++ei)
+    {
+        (*ei)->residual_flow = (*ei)->capacity;
+        while (bfs(source, sink))
+        {
+            int path_flow = 10000;
+            Node *curr = sink;
+            while (curr != source)
+            {
+                Edge *e1 = findEdge(curr->prev, curr);
+                path_flow = min(path_flow, e1->residual_flow);
+
+                curr = curr->prev;
+            }
+            curr = sink;
+            while (curr != source)
+            {
+                Edge *e1 = findEdge(curr->prev, curr);
+                e1->residual_flow -= path_flow;
+
+                Edge *e2 = findEdge(curr, curr->prev);
+                if (e2 != nullptr) e2->residual_flow += path_flow;
+                curr = curr->prev;
+            }
+            max_flow += path_flow;
+        }
+    }
+    return max_flow;
+}
+
+// Complejidad de O(n+n*n-1+m*t)
+// Donde n es el tamaño de vectores de nodos
+// Donde m es el tamaño de vectores de vecinos
+// Donde t es el tamaño de vectores de edges
+bool Graph::bfs(Node *s, Node *t)
+{
+    vector<Node *>::iterator ni;
+    for (ni = nodes.begin(); ni != nodes.end(); ++ni)
+    {
+        (*ni)->visited = false;
+    }
+
+    vector<Node *> q;
+    q.push_back(s);
+    s->prev = nullptr;
+    s->visited = true;
+
+    while (q.size() > 0)
+    {
+        Node *u = q[0];
+        remove(q, u);
+        vector<Node *>::iterator v;
+        vector<Node *> neighbors = getNeighbors(u);
+        for (v = neighbors.begin(); v != neighbors.end(); ++v)
+        {
+            Edge *e = findEdge(u, *v);
+            if (e != nullptr)
+            {
+                if ((*v)->visited == false && e->residual_flow > 0)
+                {
+                    q.push_back(*v);
+                    (*v)->prev = u;
+                    (*v)->visited = true;
+                }
+            }
+        }
+    }
+    return t->visited == true;
+}
+
+vector<Edge*> Graph::runKruskal()
+{
+    vector<Edge*> F;
+    sort(edges.begin(), edges.end(), *comparator);
+    
+    
+    vector<Node*>::iterator it;
+    for (it = nodes.begin(); it != nodes.end(); it++)
+    {
+        ds->MakeSet((*it));
+    }
+
+    vector<Edge*>::iterator et;
+    for (et = edges.begin(); et != edges.end(); et++)
+    {
+        Node* u = (*et)->first;
+        Node* v = (*et)->second;
+        if(ds->findSet(u) != ds->findSet(v))
+        {
+            Edge* temp = findEdge(u, v);
+            F.push_back(temp);
+            vector<Node*> uSet = ds->findSet(u);
+            vector<Node*> vSet = ds->findSet(v);
+            ds->makeUnion(uSet, vSet);
+        }
+    }
+
+    return F;
+    
 }

@@ -48,5 +48,30 @@ vector<Node *> HeldKarp::findHamilton(Node *start)
 
 void HeldKarp::findHamilton(Node* start, int size)
 {
+    vector<FunctionG*> level;
 
+    if (size == 0)
+    {
+        vector<FunctionG*> prev; // Prev es nuevo porque estamos en tamaño 0
+        // Tomar los nodos que llegan a start y contruir conjuntos + FunctionG
+        vector<Edge*>::iterator ei;
+        for (ei = g->edges.begin(); ei != g->edges.end(); ++ei)
+        {
+            if ((*ei)->second == start) // llega a start..
+            {
+                vector<int> vi ;
+                FunctionG* fg = new FunctionG((*ei)->first->number, vi);
+                fg->result = (*ei)->weight;
+                // Lo anterior es: g(vecino de estart, {})
+                prev.push_back(fg);
+            }
+            
+        }
+        prev_results.push_back(prev);
+    }
+    else
+    {
+        vector<FunctionG> prev = prev_results[size];
+    }
+    prev_results.push_back(level);
 }

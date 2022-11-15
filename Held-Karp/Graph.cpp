@@ -21,6 +21,23 @@ vector<Node *> Graph::getNeighbors(Node *n)
     return neighbors;
 }
 
+
+void Graph::resetNodes()
+{
+
+    for (auto node : nodes)
+    {
+        node->distance = 10000;
+        node->prev = nullptr;
+    }
+
+    // DEBUG
+    // for (auto node : nodes)
+    // {
+    //     cout << "Num: " << node->number << " Distancia: " << node->distance << endl;
+    // }
+}
+
 // Complejidad O(n)
 // Donde n es el tamaño del vector de edges
 Edge *Graph::findEdge(Node *u, Node *v)
@@ -158,7 +175,6 @@ void Graph::print()
 // Donde n es el tamaño de los vectores de los nodos;
 // Complejidad alternativa O(n^3) + 2O(n)
 // Donde n es el tamaño de los vectores de los nodos se agrega '2O(n) por el agregar de generar la matriz y los edges
-
 void Graph::runFloyd()
 {
     vector<vector<int>> matrix;

@@ -71,15 +71,16 @@ int main()
     cin >> numNodes;
     cout << "Ingresa matriz de nodos: " << endl;
     vector<vector<int>> matrix = createMatrix(numNodes);
+    vector<Node *> nodes = createNodes(numNodes);
+    vector<Edge *> edges = createEdges(matrix, nodes);
+    Graph *graph = new Graph(nodes, edges);
 
     for (int i = 0; i < numNodes; i++)
     {
-        vector<Node *> nodes = createNodes(numNodes);
-        vector<Edge *> edges = createEdges(matrix, nodes);
-        Graph *graph = new Graph(nodes, edges);
         graph->runDijkstra(nodes[i]);
-        cout << "\nEl source es: " << nodes.at(i)->number << endl;
+        cout << "----" << endl;
         graph->print();
-        cout << "-------";
+        cout << "----";
+        graph->resetNodes();
     }
 }

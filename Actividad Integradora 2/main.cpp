@@ -40,6 +40,7 @@ vector<Node *> createNodes(int numNodes)
 vector<Edge *> createEdges(vector<vector<int>> matrix, vector<Node *> nodes)
 {
     vector<Edge *> edges;
+
     int nodo1 = -1;
     int nodo2;
     int ciclo = 0;
@@ -52,15 +53,20 @@ vector<Edge *> createEdges(vector<vector<int>> matrix, vector<Node *> nodes)
         {
             // DEBUG
             // cout << "Nodo 1: " << nodes.at(nodo1)->number << " Nodo 2: " << nodes.at(nodo2)->number << " Distancia: " << nodeInt << endl;
+
             if (nodeInt != -1 && nodeInt != 0)
             {
                 // DEBUG
                 // cout << "Nodo 1: " << nodes.at(nodo1)->number << " Nodo 2: " << nodes.at(nodo2)->number << " Distancia: " << nodeInt << endl;
-                edges.push_back(new Edge(nodes.at(nodo1), nodes.at(nodo2), nodeInt));
+                edges.push_back(new Edge(nodes.at(nodo1), nodes.at(nodo2), nodeInt, 0));
             }
             nodo2 += 1;
         }
+
+        // DEBUG
+        // cout << "CICLO ----> " << ciclo << endl;
     }
+
     return edges;
 }
 
@@ -71,15 +77,16 @@ int main()
     cin >> numNodes;
     cout << "Ingresa matriz de nodos: " << endl;
     vector<vector<int>> matrix = createMatrix(numNodes);
+    vector<Node *> nodes = createNodes(numNodes);
+    vector<Edge *> edges = createEdges(matrix, nodes);
+    Graph *graph = new Graph(nodes, edges);
 
-    for (int i = 0; i < numNodes; i++)
-    {
-        vector<Node *> nodes = createNodes(numNodes);
-        vector<Edge *> edges = createEdges(matrix, nodes);
-        Graph *graph = new Graph(nodes, edges);
-        graph->runDijkstra(nodes[i]);
-        cout << "\nEl source es: " << nodes.at(i)->number << endl;
-        graph->print();
-        cout << "-------";
-    }
+    int maxFlow = graph->runFordFulkerson(nodes.at(0),nodes.at(numNodes-1));
+    cout << endl;
+    cout << endl;
+    cout << "Flujo Maximo: " << to_string(maxFlow) << endl;
+    cout << endl;
+    cout << endl;
+    vector<Edge*> ed = graph->runKruskal();
+    graph->printDs();
 }

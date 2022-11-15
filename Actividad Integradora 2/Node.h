@@ -15,6 +15,7 @@ public:
     int number;
     Node* prev;
     int distance;
+    bool visited;
 
 };
 

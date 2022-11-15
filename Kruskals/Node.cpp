@@ -1,8 +1,26 @@
 #include "Node.h"
+#include <iostream>
 
-Node::Node(int _number)
+using namespace std;
+
+//El constructor de un nodo con su numero y su prev por default a NULL 
+Node::Node(int number)
 {
-    number = _number;
-    prev = nullptr;
-    distance = 10000;
+    this->number = number;
+    this->prev = NULL;
+}
+
+//Se pone el nodo en un String para facilitar su lectura.
+string Node::toString()
+{
+    if (this->prev != NULL)
+    {
+        string s = "Node " + to_string(this->number) + ". Distance: " + to_string(this->distance) + ". Prev num: " + to_string(this->prev->number) + ".";
+        return s;
+    }else{
+        string s = "Node " + to_string(this->number) + ". Distance: " + to_string(this->distance) + ". Prev num: " + "NULL" + ".";
+        return s;
+    }
+    
+    
 }

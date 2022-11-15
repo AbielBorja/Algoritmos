@@ -1,193 +1,164 @@
 #include "Graph.h"
+#include <algorithm>
 
-Graph::Graph(vector<Node *> _nodes, vector<Edge *> _edges)
-{
-    nodes = _nodes;
-    edges = _edges;
+bool comparator(const Edge* s1, const Edge* s2) {
+    return s1->weight < s2->weight;
 }
 
-//Complejidad O(n)
-// Donde n es el tamaño de las conexiones
-vector<Node *> Graph::getNeighbors(Node *n)
-{
-    // Creamos vectores vecinos y 
-    vector<Node *> neighbors;
-    vector<Edge *>::iterator ei;
-    
-    for (ei = edges.begin(); ei != edges.end(); ++ei)
-    {
-        if ((*ei)->first == n) neighbors.push_back((*ei)->second);
+//Este es el constructor de un grafo que se le da un vector de nodos y un vector de aristas.
+Graph::Graph(vector<Node*> nodes, vector<Edge*> edges) {
+    this->nodes = nodes;
+    this->edges = edges;
+    this->ds = new DisjointSets();
+}
+
+//Imprime el grafo para hacer más fácil su visualización, tiene una complejidad de O(N*M)
+//donde N es el número de nodos en el vector y M el número de aristas.
+void Graph::print() {
+    cout << "Nodes:" << endl;
+    for (int i = 0; i < this->nodes.size(); i++) {
+        cout << this->nodes.at(i)->toString() << endl;
     }
-    return neighbors;
+
+    cout << endl;
+    cout << "Edges:" << endl;
+    for (int i = 0; i < this->edges.size(); i++) {
+        cout << this->edges.at(i)->toString() << endl;
+    }
+
+    cout << "----------------------------------------------" << endl;
+
+
 }
 
-// Complejidad O(n)
-// Donde n es el tamaño de mi Q
-Node *Graph::getMinDist(vector<Node *> qs)
+void Graph::printDs()
 {
-    Node *temp;
-    int d = 1000;
-    for (auto x : qs)
+    vector<vector<Node*> >::iterator it;
+    for (it = ds->sets.begin(); it != ds->sets.end(); it++)
     {
-        if (x->distance < d)
+        vector<Node*>::iterator is;
+        for(is = (*it).begin(); is != (*it).end(); is++)
         {
-            temp = x;
-            d = x->distance;
+            cout << (*is)->toString() << endl;
         }
-            
-    }
-
-    return temp;
-}
-
-// Complejidad O(n)
-// Donde n es el tamaño de la q
-void Graph::remove(vector<Node *> &qs, Node *q)
-{
-    for (int i = 0; i < qs.size(); i++)
-    {
-        if (qs.at(i) == q)
-        {
-            qs.erase(qs.begin() + i);
-            break;
-        }
-    }
-}
-
-// Complejidad O(n)
-// Donde n es el tamaño de las conexiones
-int Graph::getLegth(Node* u, Node* v)
-{
-    vector<Edge *>::iterator ei;
-    for (ei = edges.begin(); ei != edges.end(); ++ei)
-    {
-        if ((*ei)->first == u && (*ei)->second == v) return ((*ei)->weight);
-        if ((*ei)->first == v && (*ei)->second == u) return ((*ei)->weight);
-        
-    }
-    return 0;
-}
-
-// Complejidad O(n + m log(n))
-// Donde n son los nodos del grafo
-// DOnde m son las coneciones que tiene el graph
-// Logaritmo por la cantidad de recurisividad que se tiene que hacer dentro de la función
-void Graph::runDijkstra(Node *source)
-{
-    // Iniciamos el source con distancia 0
-    source->distance = 0;
-    vector<Node *> Q = nodes;
-
-    //Mientras Q no este vacio seguimos con el calulo de peso
-    while (!Q.empty())
-    {
-        Node *u = getMinDist(Q);
-        vector<Node *> neighbors = getNeighbors(u);
-        remove(Q, u);
-
-        // DEBUGS
-        //cout << "\nNodo con menor distancia ahora es: " << u->number << endl;
-
-        // DEBUGS
-        //cout << "Asi anda Q ";
-        //for(auto x : Q) cout << x->number << " ";
-        //cout << endl;
-
-        //DEBUGS
-        //for (auto neig : neighbors) cout << "Somos los vecinos " << neig->number << endl;
-
-        vector<Node *>::iterator it;
-        for (auto ni : neighbors)
-        {
-            it = std::find(Q.begin(), Q.end(), ni);
-            if (it != Q.end())
-            {
-                int alt = u->distance + getLegth(u, ni);
-
-                if (alt < ni->distance)
-                {
-                    // DEBUG
-                    // cout << "Distancia actual del nodo " << ni->number << ": " << ni->distance << endl;
-                    // cout << "Distancia alternativa= " << alt << " De nodo " << u->number << " y " << ni->number << endl;
-                    ni->distance = alt;
-                    ni->prev = u;
-                }
-                
-            }
-        }
-    }
-}
-
-// Complejidad  O(n)
-// Donde n es el tamaño del vector de nodos
-void Graph::print()
-{
-    for(auto node : nodes){
-        
-        if(node->prev != nullptr)
-        {
-            cout << "Node: " << node->number;
-            cout << " to node " << node->number;
-            cout << " : " << node->distance << endl;
-        }
-        
+        cout << endl;
     }
     
 }
 
-// Complejidad O(n^3)
-// Donde n es el tamaño de los vectores de los nodos;
-// Complejidad alternativa O(n^3) + 2O(n)
-// Donde n es el tamaño de los vectores de los nodos se agrega '2O(n) por el agregar de generar la matriz y los edges
-
-void Graph::runFloyd()
+//Función que convierte un vector de strings a un vector de Ints, que tiene una complejidad O(N) donde N es el tamaño del vector de strings.
+vector<int> Graph::convertStringsToInt(vector<string> strings)
 {
-    vector<vector<int>> matrix;
-    for (int i = 0; i < nodes.size(); i++)
+    vector<int> ints;
+    vector<string>::iterator it;
+    for (it = strings.begin(); it != strings.end(); it++)
     {
-        vector<int> row(nodes.size(), 10000);
-        row[i] = 0;
-        matrix.push_back(row);
+        int i;
+        string str = *it;
+        std::istringstream(str) >> i;
+        ints.push_back(i);
+    }
+    return ints;
+    
+}
+
+//Función que parte l string con un separador con complejidad O(N) donde N es el tamaño del string.
+vector<string> Graph::splitString(string s, string sep)
+{
+    vector<string> tokens;
+    size_t pos = 0;
+    string token;
+    while((pos = s.find(sep)) != string::npos)
+    {
+        token = s.substr(0, pos);
+        tokens.push_back(token);
+        s.erase(0, pos + sep.length());
+    }
+    tokens.push_back(s);
+    return tokens;
+}
+
+//Se acepta el input del número de nodos y luego las conexiones de cada uno, tiene una complejidad O(N + N^2) ya que primero se crean los nodos
+//Luego la lista de aristas que se tiene que recorrer de nuevo N veces y además creando cada arista otras N veces.
+void Graph::createGraph()
+{
+    int n;
+    cout << "El número de nodos en el grafo: ";
+    cin >> n;
+
+    for (int i = 0; i < n; i++)
+    {
+        Node* temp = new Node(i+1);
+        this->nodes.push_back(temp);
     }
 
-    for (auto ei : edges)
+    for (int i = 0; i < n; i++)
     {
-        int row = ei->first->number-1;
-        int column = ei->second->number-1;
-        int value = ei->weight;
 
-        matrix[row][column] = value;
-    }
-    for (int k = 0; k < nodes.size(); k++)
-    {
-        for (int i = 0; i < nodes.size(); i++)
+        string row;
+        cin >> row;
+        string sep = ",";
+        vector<string> numbers = splitString(row, sep);
+        vector<int> ints = convertStringsToInt(numbers);
+        for (int j = 0; j < ints.size(); j++)
         {
-            for (int j = 0; j < nodes.size(); j++)
-            {
-                if (matrix[i][j] > (matrix[i][k] + matrix[k][j]))
-                {
-                    matrix[i][j] = (matrix[i][k] + matrix[k][j]);
-                }
-                
+            if(ints.at(j) != -1 && ints.at(j) != 0){
+                Edge* temp = new Edge(this->nodes.at(i), this->nodes.at(j),ints.at(j));
+                this->edges.push_back(temp);
             }
-            
         }
         
     }
 
-    printFloyd(matrix);
 }
 
-// O(n^2)
-// Print elemento de la matriz de Floyd
-void Graph::printFloyd(vector<vector<int>> matrix)
-{
-    for (auto col : matrix)
-    {
-        for (auto rows : col)
-        {
-            cout << rows << " ";
+Edge* Graph::getEdge(Node* u, Node* v) {
+    Edge* result = new Edge(new Node(-1), new Node(-1), -1);
+    for (int i = 0; i < this->edges.size(); i++) {
+        if (this->edges.at(i)->first == u) {
+
+            if (this->edges.at(i)->second == v) {
+                return this->edges.at(i);
+            }
+
+        } else if (this->edges.at(i)->first == v) {
+
+            if (this->edges.at(i)->second == u) {
+                return this->edges.at(i);
+            }
+
         }
-        cout << "\n";
     }
+    return result;
+}
+
+vector<Edge*> Graph::runKruskal()
+{
+    vector<Edge*> F;
+    sort(edges.begin(), edges.end(), *comparator);
+    
+    
+    vector<Node*>::iterator it;
+    for (it = nodes.begin(); it != nodes.end(); it++)
+    {
+        ds->MakeSet((*it));
+    }
+
+    vector<Edge*>::iterator et;
+    for (et = edges.begin(); et != edges.end(); et++)
+    {
+        Node* u = (*et)->first;
+        Node* v = (*et)->second;
+        if(ds->findSet(u) != ds->findSet(v))
+        {
+            Edge* temp = getEdge(u, v);
+            F.push_back(temp);
+            vector<Node*> uSet = ds->findSet(u);
+            vector<Node*> vSet = ds->findSet(v);
+            ds->makeUnion(uSet, vSet);
+        }
+    }
+
+    return F;
+    
 }

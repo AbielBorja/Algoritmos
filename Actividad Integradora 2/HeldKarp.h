@@ -6,7 +6,7 @@ using namespace std;
 class HeldKarp
 {
 public:
-    vector<FunctionG*> prev_results;
+    vector<vector<FunctionG*>> prev_results;
     Graph* g;
     HeldKarp(Graph* _g);
     vector<Node*> findHamilton(Node* start);

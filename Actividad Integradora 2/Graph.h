@@ -1,7 +1,10 @@
 #include <iostream>
 #include <vector>
+#include <iomanip>
+#include <sstream>
 #include "Node.h"
 #include "Edge.h"
+#include "DisjointSets.h"
 #include <algorithm>
 
 using namespace std;
@@ -25,14 +28,17 @@ public:
     Node *getMinDist(vector<Node *> qs);
     void remove(vector<Node *> &qs, Node *q);
     int getLegth(Node *u, Node *v);
-    // ----------
+    // ---------- Kruskal
+    DisjointSets* ds;
+    vector<Edge*> runKruskal();
 
     // --------- Flujo Maximo
     void processPath(vector<Edge *> path);
     int runFordFulkerson(Node *s, Node *t);
     bool bfs(Node *s, Node *t);
-    // --------
+    
 
+    // --------
     Edge *findEdge(Node *u, Node *v);
     void resetNodes();
     void pushNodes(int capacity);
