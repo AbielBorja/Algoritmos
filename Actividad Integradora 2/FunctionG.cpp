@@ -1,18 +1,14 @@
-#include <iostream>
 #include "FunctionG.h"
 
-FunctionG::FunctionG(int _exit_val, vector<int> _set)
+// O(n)
+// Donde n es el tamano del vector
+FunctionG::FunctionG(int exit, vector<int> set)
 {
     vector<int>::iterator it;
-    for (it = _set.begin(); it != _set.end(); ++it)
+    for (it = set.begin(); it != set.end(); it++)
     {
-        set.push_back(*it);
+        this->set.push_back(*it);
     }
-    exit = _exit_val;
+    exit = exit;
     result = 0;
-}
-
-vector<vector<int>> FunctionG::find_permutations()
-{
-
 }

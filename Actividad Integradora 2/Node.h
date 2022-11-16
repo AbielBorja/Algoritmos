@@ -16,6 +16,7 @@ public:
     Node* prev;
     int distance;
     bool visited;
+    string toString();
 
 };
 

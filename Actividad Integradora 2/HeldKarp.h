@@ -1,14 +1,27 @@
-#pragma once
+#ifndef __HELDKARP
+#define __HELDKARP
+
+#include <iostream>
+#include <algorithm>
+#include <vector>
 #include "Graph.h"
 #include "FunctionG.h"
+
 using namespace std;
 
 class HeldKarp
 {
-public:
-    vector<vector<FunctionG*>> prev_results;
-    Graph* g;
-    HeldKarp(Graph* _g);
-    vector<Node*> findHamilton(Node* start);
-    void findHamilton(Node* start, int size);
+    public:
+        Graph* g;
+        HeldKarp(Graph* g);
+        vector<int> findHamilton(Node* start);
+        void findHamilton(Node* start, int set_size);
+        vector<int> values_without(vector<int>& v, int to_remove); 
+        void findCombinations(vector<int>& arr, int n, int r, int index, vector<int>& data, int i, vector<vector<int>>& combos);
+        bool compareSets(vector<int> a, vector<int> b);
+        int findPrevValueG(int e, vector<int> s);
+        int findResultG(FunctionG* fg);
+        int findResultP(vector<FunctionG*> vfg, Node* start);
+
 };
+#endif

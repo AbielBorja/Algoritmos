@@ -11,6 +11,8 @@ void DisjointSets::MakeSet(Node* x)
     sets.push_back(set);
 }
 
+// O(n^2)
+// Donde n el tamaño de los vectores de nodos
 void DisjointSets::makeUnion(vector<Node*> a, vector<Node*> b)
 {
     vector<Node*> unionVec(a.size() + b.size());
@@ -32,6 +34,8 @@ void DisjointSets::makeUnion(vector<Node*> a, vector<Node*> b)
     }
 }
 
+// O(n^2)
+// Donde n el tamaño de los vectores de nodos
 vector<Node* > DisjointSets::findSet(Node* n)
 {
     vector<vector<Node*> >::iterator it;
@@ -51,6 +55,5 @@ vector<Node* > DisjointSets::findSet(Node* n)
 
     vector<Node*> emptyVec;
     return emptyVec;
-    
 }
 

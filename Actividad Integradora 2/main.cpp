@@ -79,14 +79,29 @@ int main()
     vector<vector<int>> matrix = createMatrix(numNodes);
     vector<Node *> nodes = createNodes(numNodes);
     vector<Edge *> edges = createEdges(matrix, nodes);
+    // Hamilton
     Graph *graph = new Graph(nodes, edges);
 
-    int maxFlow = graph->runFordFulkerson(nodes.at(0),nodes.at(numNodes-1));
+    // Kruskal
+    Graph *graph2 = new Graph(nodes, edges);
+    vector<Edge *> ed = graph2->runKruskal();
+    cout << "\nKruskal: " << endl;
+    vector<Edge *>::iterator it;
+    for (it = ed.begin(); it != ed.end(); it++)
+    {
+        cout << (*it)->toString() << endl;
+    }
+
     cout << endl;
     cout << endl;
-    cout << "Flujo Maximo: " << to_string(maxFlow) << endl;
-    cout << endl;
-    cout << endl;
-    vector<Edge*> ed = graph->runKruskal();
-    graph->printDs();
+    
+    // Flujo Maximo
+    vector<vector<int>> matrix2 = createMatrix(numNodes);
+    vector<Node *> nodes2 = createNodes(numNodes);
+    vector<Edge *> edges2 = createEdges(matrix2, nodes2);
+    Graph *graph3 = new Graph(nodes2, edges2);
+    int maxFlow = graph3->runFordFulkerson(nodes2.at(0), nodes2.at(numNodes - 1));
+    cout << "Flujo Maximo de informacion del nodo inicial al nodo final. : " << to_string(maxFlow) << endl;
+
+    return 0;
 }

@@ -5,28 +5,28 @@ Graph::Graph(vector<Node *> _nodes, vector<Edge *> _edges)
     nodes = _nodes;
     edges = _edges;
     this->ds = new DisjointSets();
-
 }
 
-bool comparator(const Edge* s1, const Edge* s2) {
+bool comparator(const Edge *s1, const Edge *s2)
+{
     return s1->weight < s2->weight;
 }
 
-//Complejidad O(n)
-// Donde n es el tamaño de las conexiones
+// Complejidad O(n)
+//  Donde n es el tamaño de las conexiones
 vector<Node *> Graph::getNeighbors(Node *n)
 {
-    // Creamos vectores vecinos y 
+    // Creamos vectores vecinos y
     vector<Node *> neighbors;
     vector<Edge *>::iterator ei;
-    
+
     for (ei = edges.begin(); ei != edges.end(); ++ei)
     {
-        if ((*ei)->first == n) neighbors.push_back((*ei)->second);
+        if ((*ei)->first == n)
+            neighbors.push_back((*ei)->second);
     }
     return neighbors;
 }
-
 
 void Graph::resetNodes()
 {
@@ -64,6 +64,22 @@ Edge *Graph::findEdge(Node *u, Node *v)
 }
 
 // Complejidad O(n)
+// Donde n es el tamaño del vector de edges
+Edge *Graph::findEdgeInt(int u, int v)
+{
+    Edge *e = nullptr;
+    vector<Edge *>::iterator ei;
+    for (ei = edges.begin(); ei != edges.end(); ++ei)
+    {
+        bool a = ((*ei)->first)->number == u && ((*ei)->second)->number == v;
+        if (a)
+        {
+            return (*ei);
+        }
+    }
+    return e;
+}
+// Complejidad O(n)
 // Donde n es el tamaño de mi Q
 Node *Graph::getMinDist(vector<Node *> qs)
 {
@@ -76,7 +92,6 @@ Node *Graph::getMinDist(vector<Node *> qs)
             temp = x;
             d = x->distance;
         }
-            
     }
 
     return temp;
@@ -98,14 +113,15 @@ void Graph::remove(vector<Node *> &qs, Node *q)
 
 // Complejidad O(n)
 // Donde n es el tamaño de las conexiones
-int Graph::getLegth(Node* u, Node* v)
+int Graph::getLegth(Node *u, Node *v)
 {
     vector<Edge *>::iterator ei;
     for (ei = edges.begin(); ei != edges.end(); ++ei)
     {
-        if ((*ei)->first == u && (*ei)->second == v) return ((*ei)->weight);
-        if ((*ei)->first == v && (*ei)->second == u) return ((*ei)->weight);
-        
+        if ((*ei)->first == u && (*ei)->second == v)
+            return ((*ei)->weight);
+        if ((*ei)->first == v && (*ei)->second == u)
+            return ((*ei)->weight);
     }
     return 0;
 }
@@ -120,7 +136,7 @@ void Graph::runDijkstra(Node *source)
     source->distance = 0;
     vector<Node *> Q = nodes;
 
-    //Mientras Q no este vacio seguimos con el calulo de peso
+    // Mientras Q no este vacio seguimos con el calulo de peso
     while (!Q.empty())
     {
         Node *u = getMinDist(Q);
@@ -128,15 +144,15 @@ void Graph::runDijkstra(Node *source)
         remove(Q, u);
 
         // DEBUGS
-        //cout << "\nNodo con menor distancia ahora es: " << u->number << endl;
+        // cout << "\nNodo con menor distancia ahora es: " << u->number << endl;
 
         // DEBUGS
-        //cout << "Asi anda Q ";
-        //for(auto x : Q) cout << x->number << " ";
-        //cout << endl;
+        // cout << "Asi anda Q ";
+        // for(auto x : Q) cout << x->number << " ";
+        // cout << endl;
 
-        //DEBUGS
-        //for (auto neig : neighbors) cout << "Somos los vecinos " << neig->number << endl;
+        // DEBUGS
+        // for (auto neig : neighbors) cout << "Somos los vecinos " << neig->number << endl;
 
         vector<Node *>::iterator it;
         for (auto ni : neighbors)
@@ -154,7 +170,6 @@ void Graph::runDijkstra(Node *source)
                     ni->distance = alt;
                     ni->prev = u;
                 }
-                
             }
         }
     }
@@ -164,17 +179,16 @@ void Graph::runDijkstra(Node *source)
 // Donde n es el tamaño del vector de nodos
 void Graph::print()
 {
-    for(auto node : nodes){
-        
-        if(node->prev != nullptr)
+    for (auto node : nodes)
+    {
+
+        if (node->prev != nullptr)
         {
             cout << "Node: " << node->number;
             cout << " to node " << node->number;
             cout << " : " << node->distance << endl;
         }
-        
     }
-    
 }
 
 // Complejidad O(n^3)
@@ -193,8 +207,8 @@ void Graph::runFloyd()
 
     for (auto ei : edges)
     {
-        int row = ei->first->number-1;
-        int column = ei->second->number-1;
+        int row = ei->first->number - 1;
+        int column = ei->second->number - 1;
         int value = ei->weight;
 
         matrix[row][column] = value;
@@ -209,11 +223,8 @@ void Graph::runFloyd()
                 {
                     matrix[i][j] = (matrix[i][k] + matrix[k][j]);
                 }
-                
             }
-            
         }
-        
     }
 
     printFloyd(matrix);
@@ -232,7 +243,6 @@ void Graph::printFloyd(vector<vector<int>> matrix)
         cout << "\n";
     }
 }
-
 
 // Complejidad O(x^2*log(n+n*n-1+m*t)+3z)
 // Donde x es el tamaño de la cantidad de edges que se envian
@@ -268,7 +278,8 @@ int Graph::runFordFulkerson(Node *source, Node *sink)
                 e1->residual_flow -= path_flow;
 
                 Edge *e2 = findEdge(curr, curr->prev);
-                if (e2 != nullptr) e2->residual_flow += path_flow;
+                if (e2 != nullptr)
+                    e2->residual_flow += path_flow;
                 curr = curr->prev;
             }
             max_flow += path_flow;
@@ -317,33 +328,50 @@ bool Graph::bfs(Node *s, Node *t)
     return t->visited == true;
 }
 
-vector<Edge*> Graph::runKruskal()
+// Complejidad: O(n + m)
+// Donde n es el tamaño del vector, de los nodos
+// Donde m es el tamaño del vector, de los edges
+vector<Edge *> Graph::runKruskal()
 {
-    vector<Edge*> F;
+    vector<Edge *> F;
     sort(edges.begin(), edges.end(), *comparator);
-    
-    
-    vector<Node*>::iterator it;
+
+    vector<Node *>::iterator it;
     for (it = nodes.begin(); it != nodes.end(); it++)
     {
         ds->MakeSet((*it));
     }
 
-    vector<Edge*>::iterator et;
+    vector<Edge *>::iterator et;
     for (et = edges.begin(); et != edges.end(); et++)
     {
-        Node* u = (*et)->first;
-        Node* v = (*et)->second;
-        if(ds->findSet(u) != ds->findSet(v))
+        Node *u = (*et)->first;
+        Node *v = (*et)->second;
+        if (ds->findSet(u) != ds->findSet(v))
         {
-            Edge* temp = findEdge(u, v);
+            Edge *temp = findEdge(u, v);
             F.push_back(temp);
-            vector<Node*> uSet = ds->findSet(u);
-            vector<Node*> vSet = ds->findSet(v);
+            vector<Node *> uSet = ds->findSet(u);
+            vector<Node *> vSet = ds->findSet(v);
             ds->makeUnion(uSet, vSet);
         }
     }
 
     return F;
-    
+}
+
+// Complejidad O(n^2)
+// Donde n es el tamño de vector de nodos
+void Graph::printDs()
+{
+    vector<vector<Node *>>::iterator it;
+    for (it = ds->sets.begin(); it != ds->sets.end(); it++)
+    {
+        vector<Node *>::iterator is;
+        for (is = (*it).begin(); is != (*it).end(); is++)
+        {
+            cout << (*is)->toString() << endl;
+        }
+        cout << endl;
+    }
 }
