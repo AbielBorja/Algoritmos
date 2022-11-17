@@ -1,16 +1,21 @@
 #include "Edge.h"
 
-Edge::Edge(Node* _first, Node* _second, int _weigth)
-{
-    first = _first;
-    second = _second;
-    weight = _weigth;
-}
-
-Edge::Edge(Node* _first, Node* _second, int _capacity, int _residual_flow)
+Edge::Edge(Node* _first, Node* _second, int _weight, int _residual_flow)
 {
     first = _first;
     second = _second;
     residual_flow = _residual_flow;
-    capacity = _capacity;
+    capacity = _weight;
+    weight = _weight;
+}
+
+//Esta función imprime una arista
+string Edge::toString()
+{
+    string s;
+    s += "Num del nodo A: " + to_string(this->first->number) + " a ";
+    s += "Num del nodo B: " + to_string(this->second->number) + " ";
+    s += "con distancia de: " + to_string(this->weight);
+
+    return s;
 }

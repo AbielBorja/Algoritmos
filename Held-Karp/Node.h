@@ -9,16 +9,13 @@ using namespace std;
 class Node
 {
 private:
-    
 public:
     Node(int number);
     int number;
-    Node* prev;
+    Node *prev;
     int distance;
-
+    bool visited;
+    string toString();
 };
 
-
 #endif
-
-

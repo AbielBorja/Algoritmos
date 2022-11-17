@@ -1,6 +1,7 @@
 #include "Node.h"
 #include "Edge.h"
 #include "Graph.h"
+#include "HeldKarp.h"
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -56,7 +57,7 @@ vector<Edge *> createEdges(vector<vector<int>> matrix, vector<Node *> nodes)
             {
                 // DEBUG
                 // cout << "Nodo 1: " << nodes.at(nodo1)->number << " Nodo 2: " << nodes.at(nodo2)->number << " Distancia: " << nodeInt << endl;
-                edges.push_back(new Edge(nodes.at(nodo1), nodes.at(nodo2), nodeInt));
+                edges.push_back(new Edge(nodes.at(nodo1), nodes.at(nodo2), nodeInt,0));
             }
             nodo2 += 1;
         }
@@ -74,13 +75,6 @@ int main()
     vector<Node *> nodes = createNodes(numNodes);
     vector<Edge *> edges = createEdges(matrix, nodes);
     Graph *graph = new Graph(nodes, edges);
-
-    for (int i = 0; i < numNodes; i++)
-    {
-        graph->runDijkstra(nodes[i]);
-        cout << "----" << endl;
-        graph->print();
-        cout << "----";
-        graph->resetNodes();
-    }
+    HeldKarp *hamilton = new HeldKarp(graph);
+    hamilton->findHamilton(nodes[0]);
 }

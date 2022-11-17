@@ -8,11 +8,6 @@ FunctionG::FunctionG(int _exit_val, vector<int> _set)
     {
         set.push_back(*it);
     }
-    exit = _exit_val;
+    exit_val = _exit_val;
     result = 0;
-}
-
-vector<vector<int>> FunctionG::find_permutations()
-{
-
 }
