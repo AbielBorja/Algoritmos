@@ -1,0 +1,10 @@
+Daniel Alejandro Martinez Rosete A01654093
+Abiel Moisés Borja García   A01654937
+
+Reparto del trabajo:
+
+Implemetación del algoritmo de Kruskal: Abiel Borja
+Implemetación del algoritmo de Flujo Máximo: Abiel Borja
+
+Implemetación del algoritmo de Hamilton: Daniel Martinez
+Implemetación del algoritmo de Puntos Geometricos: Daniel Martinez

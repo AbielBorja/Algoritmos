@@ -4,7 +4,7 @@ Node::Node(int _number)
 {
     number = _number;
     prev = nullptr;
-    distance = 10000;
+    distance = 100000;
     visited = false;
 }
 
