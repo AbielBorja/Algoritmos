@@ -1,8 +1,8 @@
 #include "Node.h"
 #include "Edge.h"
 #include "Graph.h"
-#include "Point.h"
-#include "Points.h"
+#include "Coord.h"
+#include "Delauney.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -61,8 +61,7 @@ int main()
     int numNodes;
     vector<vector<int>> matrix;
     vector<vector<int>> matrix2;
-    vector<Point> puntos;
-    // leer el archivo
+    vector<Coord> puntos;
     ifstream file("test.txt");
 
     if (file.is_open())
@@ -99,7 +98,7 @@ int main()
             {
                 stringstream lineStream(l);
                 vector<int> numbers(istream_iterator<int>(lineStream),
-                                     {});
+                                    {});
                 for (int k = 0; k < numbers.size(); k++)
                 {
                     int num = numbers[k];
@@ -110,7 +109,7 @@ int main()
             }
         }
 
-        for (int i = 0; i < numNodes + 1; i++)
+        for (int i = 0; i < numNodes + 2; i++)
         {
             getline(file, line);
             string l = line.c_str();
@@ -127,7 +126,7 @@ int main()
             {
                 float a = stod(t);
                 float b = stod(left);
-                Point punto(a, b);
+                Coord punto(a, b);
                 puntos.push_back(punto);
             }
         }
@@ -187,19 +186,10 @@ int main()
     cout << endl;
 
     // Puntos
-    Point *a = new Point(200, 500);
-    Point *b = new Point(300, 100);
-    Point *c = new Point(450, 150);
-    Point *d = new Point(520, 480);
+    
 
-    vector<Point *> points;
-    points.push_back(a);
-    points.push_back(b);
-    points.push_back(c);
-    points.push_back(d);
-
-    Points *p = new Points(points);
-    p->findClosest();
+    Delauney* delauney = new Delauney(puntos);
+    delauney->findMin();
 
     return 0;
 }

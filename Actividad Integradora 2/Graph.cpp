@@ -28,8 +28,10 @@ vector<Node *> Graph::getNeighbors(Node *n)
     return neighbors;
 }
 
+
 void Graph::resetNodes()
 {
+
 
     for (auto node : nodes)
     {
@@ -37,11 +39,6 @@ void Graph::resetNodes()
         node->prev = nullptr;
     }
 
-    // DEBUG
-    // for (auto node : nodes)
-    // {
-    //     cout << "Num: " << node->number << " Distancia: " << node->distance << endl;
-    // }
 }
 
 // Complejidad O(n)
